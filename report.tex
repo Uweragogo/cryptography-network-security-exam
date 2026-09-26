@@ -1,0 +1,228 @@
+```latex
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{Cryptography and Network Security\\Integrated Security Assessment}
+\author{Uwera Nyiramajigija}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Module Information}
+
+\begin{tabular}{>{\bfseries}p{0.32\textwidth} p{0.6\textwidth}}
+Module & ETTCS801 Cryptography and Network Security \\
+Lecturer & Isaac TUMWINE \\
+Assessment & Integrated Situation Assessment \\
+GitHub Repository & \url{https://github.com/Uweragogo/cryptography-network-security-exam}
+\end{tabular}
+
+\section{Introduction}
+
+This project addresses the security of a central student records environment serving two campuses. The security review identified risks related to weak staff passwords, unencrypted file transfers, outdated software, guest network access, and repeated connection attempts from an unfamiliar external address.
+
+The project focuses on risk assessment, encryption, file integrity verification, and network traffic filtering. A small Python security toolkit was developed to demonstrate encryption, decryption, verification, and SHA-256 integrity checking.
+
+\section{Risk Assessment}
+
+\subsection{Assets, Vulnerabilities and Consequences}
+
+\begin{longtable}{p{0.25\textwidth} p{0.30\textwidth} p{0.35\textwidth}}
+\toprule
+\textbf{Asset} & \textbf{Vulnerability} & \textbf{Possible Consequence} \\
+\midrule
+Student records server &
+Guest network access to the records server &
+Unauthorised users may access or interfere with confidential student records. \\
+
+Student record files transferred between campuses &
+Unencrypted file transfers &
+Student information could be exposed or intercepted during transmission. \\
+
+Staff accounts and access credentials &
+Weak staff passwords &
+Attackers may gain unauthorised access to staff accounts and protected systems. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Risk Ranking}
+
+\begin{longtable}{p{0.08\textwidth} p{0.27\textwidth} p{0.13\textwidth} p{0.13\textwidth} p{0.29\textwidth}}
+\toprule
+\textbf{Rank} & \textbf{Risk} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Reason} \\
+\midrule
+1 &
+Guest access to the student records server &
+High &
+High &
+Guest network access creates a direct opportunity for unauthorised access to student records. \\
+
+2 &
+Unencrypted file transfers &
+High &
+High &
+Files transferred without encryption may be intercepted and exposed during transmission. \\
+
+3 &
+Weak staff passwords &
+High &
+Medium &
+Weak passwords make staff accounts easier to compromise. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Recommended Controls}
+
+\begin{itemize}
+    \item Configure firewall rules to block guest network access to the student records server.
+    \item Encrypt student record files during transfer and use SHA-256 hashing to detect unauthorised modification.
+    \item Enforce strong password requirements for staff accounts and use multi-factor authentication where supported.
+\end{itemize}
+
+\section{Encryption and Integrity Toolkit}
+
+\subsection{Implementation}
+
+The Python security toolkit uses the Fernet implementation provided by the \texttt{cryptography} library for symmetric authenticated encryption.
+
+The encryption key is generated locally and stored outside the GitHub repository. The key is therefore not included in the project repository.
+
+The program performs the following operations:
+
+\begin{enumerate}
+    \item Encrypt the sample student record.
+    \item Decrypt the encrypted file.
+    \item Verify that the decrypted file matches the original.
+    \item Calculate and compare SHA-256 hashes to detect subsequent changes.
+\end{enumerate}
+
+\subsection{Encryption Test}
+
+The encryption test produced the following result:
+
+\begin{verbatim}
+File encrypted successfully: student_record.encrypted
+\end{verbatim}
+
+This confirms that the sample student record was successfully encrypted.
+
+\subsection{Decryption and Verification Test}
+
+The program then decrypted the encrypted file and compared it with the original record.
+
+The result was:
+
+\begin{verbatim}
+File decrypted successfully: student_record_decrypted.txt
+Verification successful: decrypted file matches the original.
+\end{verbatim}
+
+This demonstrates that the encrypted file could be successfully decrypted and that the decrypted contents matched the original sample record.
+
+\subsection{SHA-256 Integrity Test}
+
+A baseline SHA-256 hash was created for the student record.
+
+The baseline hash was:
+
+\begin{verbatim}
+30bb1a5da6b9dd2252e8be240bfd1cc259030e28e0e12cb8c7caaff1be12c71c
+\end{verbatim}
+
+After the student record was subsequently changed, the program calculated the following hash:
+
+\begin{verbatim}
+0fbaac00d585c7a38b1803473158297bed55cc5d2c9681bcdc464245d58207e1
+\end{verbatim}
+
+The hashes were different, so the program detected the modification and reported:
+
+\begin{verbatim}
+Integrity check failed: file has changed.
+\end{verbatim}
+
+This demonstrates that SHA-256 comparison can detect changes made to a file after a trusted baseline hash has been created.
+
+\subsection{Invalid Input Handling}
+
+The security toolkit checks whether required files exist before performing encryption, decryption, hashing, or verification.
+
+If a required file is missing, the program reports an error instead of crashing. This provides basic error handling for invalid or missing inputs.
+
+\section{Network Traffic Filtering}
+
+\subsection{Required Firewall Controls}
+
+The assessment requires the following network controls:
+
+\begin{enumerate}
+    \item Block guest network access to the student records server.
+    \item Permit authorised staff network access to the service specified by the assessor.
+    \item Block other inbound access to that service.
+\end{enumerate}
+
+These controls are intended to restrict access to the student records environment according to authorised network sources.
+
+\subsection{Laboratory Network Parameters}
+
+The assessment instructions supplied for this project do not provide the laboratory IP addresses, network ranges, protected service, or service port.
+
+Therefore, these values have not been invented.
+
+\begin{longtable}{p{0.45\textwidth} p{0.45\textwidth}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Student records server IP & To be provided by assessor \\
+Guest network/subnet & To be provided by assessor \\
+Authorised staff network/subnet & To be provided by assessor \\
+Protected service & To be provided by assessor \\
+Service port & To be provided by assessor \\
+Firewall machine/host & To be confirmed \\
+Firewall operating system & To be confirmed \\
+Firewall technology & To be confirmed \\
+\bottomrule
+\end{longtable}
+
+Actual firewall rules and connection results should only be entered after the assessor provides the laboratory parameters.
+
+\subsection{Firewall Testing Plan}
+
+Three connection tests are required:
+
+\begin{enumerate}
+    \item Test an authorised staff connection to the specified service. The expected result is that the connection is permitted.
+    \item Test a guest-network connection to the student records server. The expected result is that the connection is blocked.
+    \item Test a connection from another unauthorised source to the protected service. The expected result is that the connection is blocked.
+\end{enumerate}
+
+The exact firewall and connection-testing commands depend on the operating system and firewall technology used in the authorised laboratory.
+
+The detailed testing procedure is recorded in \texttt{filter\_tests.md}.
+
+\section{Project Structure}
+
+The main project files are:
+
+\begin{itemize}
+    \item \texttt{README.md} -- project overview, installation and execution instructions.
+    \item \texttt{risk\_assessment.md} -- assets, vulnerabilities, risk ranking and recommended controls.
+    \item \texttt{security\_tool.py} -- encryption, decryption, verification and SHA-256 integrity toolkit.
+    \item \texttt{student\_record.txt} -- sample student record used for testing.
+    \item \texttt{student\_record.encrypted} -_
+```
